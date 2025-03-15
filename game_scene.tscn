@@ -1,0 +1,40 @@
+[gd_scene load_steps=6 format=3 uid="uid://cylktloebodhp"]
+
+[ext_resource type="Script" uid="uid://b42fhftq8gqg" path="res://player.gd" id="1_mlf6e"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_05hpe"]
+size = Vector2(10, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_mlf6e"]
+size = Vector3(10, 0, 10)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_po0ka"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_v1wow"]
+
+[node name="game_scene" type="Node3D"]
+
+[node name="platform" type="StaticBody3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="platform"]
+mesh = SubResource("PlaneMesh_05hpe")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="platform"]
+shape = SubResource("BoxShape3D_mlf6e")
+debug_fill = false
+
+[node name="player" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.972663, 0)
+script = ExtResource("1_mlf6e")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="player"]
+mesh = SubResource("CapsuleMesh_po0ka")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="player"]
+shape = SubResource("CapsuleShape3D_v1wow")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
