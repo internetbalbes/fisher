@@ -1,7 +1,7 @@
 extends CharacterBody3D
 
 # Zmienna prędkości ruchu
-const SPEED = 10.0
+const SPEED = 12.0
 
 const SENSITIVITY : float = 0.15
 const MAX_VERTICAL_ANGLE = 90
