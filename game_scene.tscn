@@ -1,34 +1,77 @@
-[gd_scene load_steps=9 format=3 uid="uid://cylktloebodhp"]
+[gd_scene load_steps=19 format=3 uid="uid://cylktloebodhp"]
 
 [ext_resource type="Script" uid="uid://b42fhftq8gqg" path="res://player.gd" id="1_mlf6e"]
+[ext_resource type="Shader" uid="uid://de0eig04tb8iy" path="res://game_scene.gdshader" id="2_po0ka"]
+[ext_resource type="Texture2D" uid="uid://b78k1yoir1025" path="res://model/tree/oakbark.jpg" id="3_mixcd"]
+[ext_resource type="Texture2D" uid="uid://fy4jbys2x2rx" path="res://model/tree/oakleaf_fall.tga" id="3_v1wow"]
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_05hpe"]
-size = Vector2(10, 10)
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_po0ka"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_v1wow"]
+as_normal_map = true
+noise = SubResource("FastNoiseLite_po0ka")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mixcd"]
+render_priority = 0
+shader = ExtResource("2_po0ka")
+shader_parameter/height_scale = 0.5
+shader_parameter/noise = SubResource("NoiseTexture2D_v1wow")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_mj2jn"]
+lightmap_size_hint = Vector2i(102, 102)
+material = SubResource("ShaderMaterial_mixcd")
+size = Vector2(20, 20)
+subdivide_width = 320
+subdivide_depth = 320
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mlf6e"]
 size = Vector3(10, 0, 10)
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_po0ka"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_po0ka"]
+albedo_color = Color(0.341176, 0.176471, 1, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_v1wow"]
+material = SubResource("StandardMaterial3D_po0ka")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_v1wow"]
 
-[sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_mlf6e"]
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_po0ka"]
 
-[sub_resource type="Sky" id="Sky_po0ka"]
-sky_material = SubResource("PhysicalSkyMaterial_mlf6e")
+[sub_resource type="Sky" id="Sky_v1wow"]
+sky_material = SubResource("ProceduralSkyMaterial_po0ka")
 
 [sub_resource type="Environment" id="Environment_mlf6e"]
 background_mode = 2
-sky = SubResource("Sky_po0ka")
+sky = SubResource("Sky_v1wow")
+ambient_light_source = 3
+ambient_light_energy = 0.0
+reflected_light_source = 2
 ssr_enabled = true
+fog_enabled = true
+fog_mode = 1
+fog_light_energy = 4.87
+fog_density = 1.0
+fog_sky_affect = 0.368
+fog_depth_begin = 0.0
+fog_depth_end = 2999.5
 volumetric_fog_density = 0.0184
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mixcd"]
+albedo_texture = ExtResource("3_mixcd")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mj2jn"]
+transparency = 1
+albedo_texture = ExtResource("3_v1wow")
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_po0ka"]
 
 [node name="game_scene" type="Node3D"]
 
 [node name="platform" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="platform"]
-mesh = SubResource("PlaneMesh_05hpe")
+mesh = SubResource("PlaneMesh_mj2jn")
 skeleton = NodePath("../..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="platform"]
@@ -36,12 +79,11 @@ shape = SubResource("BoxShape3D_mlf6e")
 debug_fill = false
 
 [node name="player" type="CharacterBody3D" parent="." node_paths=PackedStringArray("camera")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 script = ExtResource("1_mlf6e")
 camera = NodePath("Camera3D")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="player"]
-mesh = SubResource("CapsuleMesh_po0ka")
+mesh = SubResource("CapsuleMesh_v1wow")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="player"]
 shape = SubResource("CapsuleShape3D_v1wow")
@@ -49,10 +91,21 @@ shape = SubResource("CapsuleShape3D_v1wow")
 [node name="Camera3D" type="Camera3D" parent="player"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 5)
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.864893, 0.119268, 0.487581, -0.213855, -0.79124, 0.572892, 0.454122, -0.599762, -0.658832, -14.6771, 15.1323, -11.8704)
-light_energy = 3.909
-shadow_enabled = true
-
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_mlf6e")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.947768, 0.192842, -0.254061, 0, 0.79653, 0.604599, 0.318959, 0.57302, -0.754926, 10, 10, 0)
+light_energy = 2.617
+shadow_enabled = true
+
+[node name="tree" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 0)
+
+[node name="Tree3D" type="Tree3D" parent="tree"]
+material_trunk = SubResource("StandardMaterial3D_mixcd")
+material_twig = SubResource("StandardMaterial3D_mj2jn")
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="tree"]
+shape = SubResource("CylinderShape3D_po0ka")
