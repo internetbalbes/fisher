@@ -18,7 +18,6 @@ func _process(delta: float) -> void:
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
-		rotate_y(deg_to_rad(-event.relative.x * SENSITIVITY))
 		vertical_angle -= event.relative.y * SENSITIVITY
 		vertical_angle = clamp(vertical_angle, -VERTICAL_LIMIT, VERTICAL_LIMIT)
 		rotation_degrees.x = vertical_angle

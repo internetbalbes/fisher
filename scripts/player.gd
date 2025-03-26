@@ -3,7 +3,8 @@ extends CharacterBody3D
 
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
-
+# camer's sensitivity
+const SENSITIVITY = 0.1
 
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
@@ -26,3 +27,7 @@ func _physics_process(delta: float) -> void:
 		velocity.z = move_toward(velocity.z, 0, SPEED)
 
 	move_and_slide()
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseMotion:
+		rotate_y(deg_to_rad(-event.relative.x * SENSITIVITY))
