@@ -1,6 +1,5 @@
-[gd_scene load_steps=21 format=3 uid="uid://dqjggb2dpy4ws"]
+[gd_scene load_steps=19 format=3 uid="uid://dqjggb2dpy4ws"]
 
-[ext_resource type="Script" uid="uid://bb8lek1xm0jia" path="res://scripts/world.gd" id="1_4mrxx"]
 [ext_resource type="Script" uid="uid://bl8h4lt1fwqk5" path="res://scripts/player.gd" id="1_nnsk1"]
 [ext_resource type="Script" uid="uid://cq0xa1ce37g08" path="res://scripts/camera_3d.gd" id="2_rwgxs"]
 [ext_resource type="AudioStream" uid="uid://cwuak50j07gy3" path="res://sounds/birds-isaiah658.ogg" id="3_4wyf3"]
@@ -25,10 +24,6 @@ map_data = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_nnsk1"]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4mrxx"]
-radius = 2.0
-height = 4.0
-
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_qfnet"]
 panorama = ExtResource("3_71j4m")
 filter = false
@@ -50,7 +45,6 @@ size = Vector2(50, 50)
 size = Vector3(50, 0, 50)
 
 [node name="world" type="Node3D"]
-script = ExtResource("1_4mrxx")
 
 [node name="ground" type="StaticBody3D" parent="."]
 collision_layer = 2
@@ -61,17 +55,10 @@ mesh = SubResource("PlaneMesh_nnsk1")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ground"]
 shape = SubResource("HeightMapShape3D_e5uuo")
 
-[node name="player" type="CharacterBody3D" parent="." node_paths=PackedStringArray("label_tip", "label_tutorial", "label_fishcatched", "ray_camera", "timer_fishcatched", "image_fishcatched", "dialog_gameend")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -16.474)
+[node name="player" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 collision_mask = 6
 script = ExtResource("1_nnsk1")
-label_tip = NodePath("../CanvasLayer/label_tip")
-label_tutorial = NodePath("../CanvasLayer/label_tutorial")
-label_fishcatched = NodePath("../CanvasLayer/label_fishcatched")
-ray_camera = NodePath("Camera3D/ray_cast_camera")
-timer_fishcatched = NodePath("timer_fishcatched")
-image_fishcatched = NodePath("../CanvasLayer/image_fishcatched")
-dialog_gameend = NodePath("../CanvasLayer/dialog_gameend")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="player"]
 mesh = SubResource("CapsuleMesh_e5uuo")
@@ -86,17 +73,12 @@ script = ExtResource("2_rwgxs")
 
 [node name="ray_cast_camera" type="RayCast3D" parent="player/Camera3D"]
 enabled = false
-target_position = Vector3(0, 0, -5)
+target_position = Vector3(0, 0, -3)
 collision_mask = 4
 
 [node name="timer_fishcatched" type="Timer" parent="player"]
+wait_time = 2.0
 one_shot = true
-
-[node name="area_tutorial" type="Area3D" parent="player"]
-collision_mask = 4
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="player/area_tutorial"]
-shape = SubResource("CapsuleShape3D_4mrxx")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_71j4m")
@@ -120,9 +102,20 @@ mesh = SubResource("PlaneMesh_4mrxx")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="lake"]
 shape = SubResource("BoxShape3D_4mrxx")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="center_tutoriallabel" type="CenterContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="image_fishcatched" type="TextureRect" parent="CanvasLayer"]
+[node name="tutoriallabel" type="Label" parent="center_tutoriallabel"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.435294, 0, 0, 1)
+theme_override_font_sizes/font_size = 25
+
+[node name="image_fish" type="TextureRect" parent="."]
+visible = false
 offset_left = 76.0
 offset_top = 5.0
 offset_right = 187.0
@@ -130,59 +123,14 @@ offset_bottom = 108.0
 texture = ExtResource("7_i7141")
 expand_mode = 1
 
-[node name="label_fishcatched" type="Label" parent="CanvasLayer"]
+[node name="label_fishcatched" type="Label" parent="."]
+visible = false
 offset_left = 18.0
 offset_top = 28.0
 offset_right = 64.0
 offset_bottom = 83.0
 theme_override_colors/font_color = Color(0.429619, 4.2716e-07, 1.68458e-07, 1)
 theme_override_font_sizes/font_size = 40
-text = "0"
-
-[node name="dialog_gameend" type="ConfirmationDialog" parent="CanvasLayer"]
-title = ""
-initial_position = 2
-ok_button_text = "Yes"
-dialog_text = "Game is finished. would you like to try again"
-dialog_hide_on_ok = false
-dialog_close_on_escape = false
-cancel_button_text = "No"
-
-[node name="label_tip" type="Label" parent="CanvasLayer"]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -417.0
-offset_top = -36.5
-offset_right = 417.0
-offset_bottom = 36.5
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.435294, 0, 0, 1)
-theme_override_font_sizes/font_size = 25
-text = "
-"
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 2
-
-[node name="label_tutorial" type="Label" parent="CanvasLayer"]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -427.0
-offset_right = 427.0
-offset_bottom = 73.0
-grow_horizontal = 2
-theme_override_colors/font_color = Color(0.435294, 0, 0, 1)
-theme_override_font_sizes/font_size = 25
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 2
+text = "10"
 
 [connection signal="timeout" from="player/timer_fishcatched" to="player" method="_on_timer_fishcatched_timeout"]
-[connection signal="body_entered" from="player/area_tutorial" to="player" method="_on_area_tutorial_body_entered"]
-[connection signal="canceled" from="CanvasLayer/dialog_gameend" to="player" method="_on_confirmation_dialog_canceled"]
-[connection signal="confirmed" from="CanvasLayer/dialog_gameend" to="player" method="_on_confirmation_dialog_confirmed"]

@@ -1,0 +1,94 @@
+[gd_scene load_steps=4 format=3 uid="uid://b3gxrxnb0khy7"]
+
+[ext_resource type="Script" uid="uid://cgspab2s8t5w0" path="res://scripts/mainmenu.gd" id="1_5mbse"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5mbse"]
+bg_color = Color(0.152941, 0.6, 0.6, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7q3kq"]
+bg_color = Color(0.152941, 0.6, 0.6, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[node name="mainmenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_5mbse")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -126.5
+offset_top = -101.5
+offset_right = 126.5
+offset_bottom = 101.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="menubutton_play" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_5mbse")
+text = "Play"
+
+[node name="menubutton_oprions" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_7q3kq")
+text = "Options"
+
+[node name="menubutton_quit" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_7q3kq")
+text = "Quit"
+
+[node name="label_gamename" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -341.0
+offset_top = -282.0
+offset_right = 346.0
+offset_bottom = -172.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 80
+text = "Fisher"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="VBoxContainer/menubutton_play" to="." method="_on_menubutton_play_pressed"]
+[connection signal="pressed" from="VBoxContainer/menubutton_oprions" to="." method="_on_menubutton_oprions_pressed"]
+[connection signal="pressed" from="VBoxContainer/menubutton_quit" to="." method="_on_menubutton_quit_pressed"]

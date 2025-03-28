@@ -1,0 +1,86 @@
+[gd_scene load_steps=3 format=3 uid="uid://sq3ret35752r"]
+
+[ext_resource type="Script" uid="uid://djncgwxqgmn50" path="res://scripts/optionsmenu.gd" id="1_ftw57"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ftw57"]
+bg_color = Color(0.152941, 0.6, 0.6, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[node name="optionsmenu" type="Control" node_paths=PackedStringArray("slider_volume", "checkbutton_tutorial", "checkbutton_tip")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ftw57")
+slider_volume = NodePath("VBoxContainer/slider_volume")
+checkbutton_tutorial = NodePath("VBoxContainer/checkbutton_tutorial")
+checkbutton_tip = NodePath("VBoxContainer/checkbutton_tip")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -217.5
+offset_top = -139.0
+offset_right = 217.5
+offset_bottom = 139.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="label_volume" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "Volume"
+
+[node name="slider_volume" type="HSlider" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="checkbutton_tutorial" type="CheckButton" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "Tutorial"
+
+[node name="checkbutton_tip" type="CheckButton" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "Tip"
+
+[node name="menubutton_back" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_ftw57")
+text = "Back"
+
+[node name="label_options" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -341.0
+offset_top = -282.0
+offset_right = 346.0
+offset_bottom = -172.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 80
+text = "Options"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="VBoxContainer/menubutton_back" to="." method="_on_menubutton_back_pressed"]
