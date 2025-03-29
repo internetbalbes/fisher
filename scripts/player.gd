@@ -108,7 +108,7 @@ func gametips(number: int):
 	if label_tip.visible:
 		match number:
 			1: 
-				label_tip.text = "The player is near the water, point the camera at the water and press the right mouse button to cast the fishing rod."
+				label_tip.text = "Left mouse button to cast a fishing rod"
 			_:	
 				label_tip.text = ""
 		
