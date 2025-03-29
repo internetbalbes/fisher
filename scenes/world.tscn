@@ -116,7 +116,6 @@ stream = ExtResource("3_4wyf3")
 script = ExtResource("4_k0juu")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 100, 130)
 shadow_enabled = true
 
 [node name="lake" type="StaticBody3D" parent="."]
