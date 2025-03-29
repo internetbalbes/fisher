@@ -1,10 +1,10 @@
-[gd_scene load_steps=21 format=3 uid="uid://dqjggb2dpy4ws"]
+[gd_scene load_steps=24 format=3 uid="uid://dqjggb2dpy4ws"]
 
 [ext_resource type="Script" uid="uid://bb8lek1xm0jia" path="res://scripts/world.gd" id="1_4mrxx"]
 [ext_resource type="Script" uid="uid://bl8h4lt1fwqk5" path="res://scripts/player.gd" id="1_nnsk1"]
 [ext_resource type="Script" uid="uid://cq0xa1ce37g08" path="res://scripts/camera_3d.gd" id="2_rwgxs"]
 [ext_resource type="AudioStream" uid="uid://cwuak50j07gy3" path="res://sounds/birds-isaiah658.ogg" id="3_4wyf3"]
-[ext_resource type="Texture2D" uid="uid://b84gign0oqbpn" path="res://skybox/AdobeStock_192618518.jpeg" id="3_71j4m"]
+[ext_resource type="Texture2D" uid="uid://cgcioettpe3nn" path="res://skybox/sky.png" id="4_4mrxx"]
 [ext_resource type="Script" uid="uid://dr5g60domjiw4" path="res://scripts/audio_stream_player_3d.gd" id="4_k0juu"]
 [ext_resource type="Texture2D" uid="uid://c0ru11ebylxg" path="res://textures/lake_water.jpg" id="6_qfnet"]
 [ext_resource type="Texture2D" uid="uid://wflxl0meen7n" path="res://textures/fishcatched.png" id="7_i7141"]
@@ -30,7 +30,7 @@ radius = 2.0
 height = 4.0
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_qfnet"]
-panorama = ExtResource("3_71j4m")
+panorama = ExtResource("4_4mrxx")
 filter = false
 
 [sub_resource type="Sky" id="Sky_k0juu"]
@@ -49,6 +49,15 @@ size = Vector2(50, 50)
 [sub_resource type="BoxShape3D" id="BoxShape3D_4mrxx"]
 size = Vector3(50, 0, 50)
 
+[sub_resource type="ORMMaterial3D" id="ORMMaterial3D_4mrxx"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_7r4gi"]
+material = SubResource("ORMMaterial3D_4mrxx")
+radius = 0.05
+height = 0.2
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_w7kh3"]
+
 [node name="world" type="Node3D"]
 script = ExtResource("1_4mrxx")
 
@@ -61,17 +70,18 @@ mesh = SubResource("PlaneMesh_nnsk1")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ground"]
 shape = SubResource("HeightMapShape3D_e5uuo")
 
-[node name="player" type="CharacterBody3D" parent="." node_paths=PackedStringArray("label_tip", "label_tutorial", "label_fishcatched", "ray_camera", "timer_fishcatched", "image_fishcatched", "dialog_gameend")]
+[node name="player" type="CharacterBody3D" parent="." node_paths=PackedStringArray("label_tip", "label_fishcatched", "ray_camera", "timer_fishcatched", "image_fishcatched", "dialog_gameend", "rodfloat", "rodfloat_mesh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -16.474)
 collision_mask = 6
 script = ExtResource("1_nnsk1")
 label_tip = NodePath("../CanvasLayer/label_tip")
-label_tutorial = NodePath("../CanvasLayer/label_tutorial")
 label_fishcatched = NodePath("../CanvasLayer/label_fishcatched")
 ray_camera = NodePath("Camera3D/ray_cast_camera")
 timer_fishcatched = NodePath("timer_fishcatched")
 image_fishcatched = NodePath("../CanvasLayer/image_fishcatched")
 dialog_gameend = NodePath("../CanvasLayer/dialog_gameend")
+rodfloat = NodePath("../rodfloat")
+rodfloat_mesh = NodePath("../rodfloat/MeshInstance3D")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="player"]
 mesh = SubResource("CapsuleMesh_e5uuo")
@@ -86,16 +96,16 @@ script = ExtResource("2_rwgxs")
 
 [node name="ray_cast_camera" type="RayCast3D" parent="player/Camera3D"]
 enabled = false
-target_position = Vector3(0, 0, -5)
+target_position = Vector3(0, 0, -8)
 collision_mask = 4
 
 [node name="timer_fishcatched" type="Timer" parent="player"]
 one_shot = true
 
-[node name="area_tutorial" type="Area3D" parent="player"]
+[node name="area_tip" type="Area3D" parent="player"]
 collision_mask = 4
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="player/area_tutorial"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="player/area_tip"]
 shape = SubResource("CapsuleShape3D_4mrxx")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -112,6 +122,7 @@ shadow_enabled = true
 [node name="lake" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -50)
 collision_layer = 4
+collision_mask = 9
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="lake"]
 material_override = SubResource("StandardMaterial3D_i7141")
@@ -182,7 +193,18 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
+[node name="rodfloat" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -33.4619)
+collision_layer = 8
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="rodfloat"]
+mesh = SubResource("CapsuleMesh_7r4gi")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="rodfloat"]
+shape = SubResource("CapsuleShape3D_w7kh3")
+
 [connection signal="timeout" from="player/timer_fishcatched" to="player" method="_on_timer_fishcatched_timeout"]
-[connection signal="body_entered" from="player/area_tutorial" to="player" method="_on_area_tutorial_body_entered"]
+[connection signal="body_entered" from="player/area_tip" to="player" method="_on_area_tip_body_entered"]
+[connection signal="body_exited" from="player/area_tip" to="player" method="_on_area_tip_body_exited"]
 [connection signal="canceled" from="CanvasLayer/dialog_gameend" to="player" method="_on_confirmation_dialog_canceled"]
 [connection signal="confirmed" from="CanvasLayer/dialog_gameend" to="player" method="_on_confirmation_dialog_confirmed"]

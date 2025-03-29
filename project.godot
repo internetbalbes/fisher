@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="fisher"
-run/main_scene="uid://b3gxrxnb0khy7"
+run/main_scene="uid://dqjggb2dpy4ws"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -53,3 +53,4 @@ jump={
 3d_physics/layer_1="player"
 3d_physics/layer_2="ground"
 3d_physics/layer_3="lake"
+3d_physics/layer_4="float"
