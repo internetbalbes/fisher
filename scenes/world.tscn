@@ -1,10 +1,11 @@
-[gd_scene load_steps=25 format=3 uid="uid://dqjggb2dpy4ws"]
+[gd_scene load_steps=30 format=3 uid="uid://dqjggb2dpy4ws"]
 
 [ext_resource type="Script" uid="uid://bb8lek1xm0jia" path="res://scripts/world.gd" id="1_4mrxx"]
 [ext_resource type="Script" uid="uid://bl8h4lt1fwqk5" path="res://scripts/player.gd" id="1_nnsk1"]
 [ext_resource type="Script" uid="uid://cq0xa1ce37g08" path="res://scripts/camera_3d.gd" id="2_rwgxs"]
 [ext_resource type="AudioStream" uid="uid://cwuak50j07gy3" path="res://sounds/birds-isaiah658.ogg" id="3_4wyf3"]
 [ext_resource type="Texture2D" uid="uid://stddfr5gd4s4" path="res://skybox/AdobeStock_427699439.jpeg" id="4_4mrxx"]
+[ext_resource type="Texture2D" uid="uid://dh7ectcwijvds" path="res://interface/target.png" id="4_e3hyu"]
 [ext_resource type="Script" uid="uid://dr5g60domjiw4" path="res://scripts/audio_stream_player_3d.gd" id="4_k0juu"]
 [ext_resource type="Texture2D" uid="uid://c0ru11ebylxg" path="res://textures/lake_water.jpg" id="6_qfnet"]
 [ext_resource type="Texture2D" uid="uid://cg4jbwucekmsq" path="res://interface/fish_icon.png" id="8_4mrxx"]
@@ -30,6 +31,31 @@ map_data = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 radius = 2.0
 height = 4.0
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jhx03"]
+albedo_color = Color(1, 1, 0, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_o8fc1"]
+material = SubResource("StandardMaterial3D_jhx03")
+top_radius = 0.01
+bottom_radius = 0.01
+
+[sub_resource type="ORMMaterial3D" id="ORMMaterial3D_4mrxx"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_7r4gi"]
+material = SubResource("ORMMaterial3D_4mrxx")
+radius = 0.05
+height = 0.2
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_w7kh3"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w7kh3"]
+albedo_color = Color(0, 0, 1, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_e3hyu"]
+material = SubResource("StandardMaterial3D_w7kh3")
+top_radius = 0.001
+bottom_radius = 0.001
+
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_qfnet"]
 panorama = ExtResource("4_4mrxx")
 filter = false
@@ -50,15 +76,6 @@ size = Vector2(50, 50)
 [sub_resource type="BoxShape3D" id="BoxShape3D_4mrxx"]
 size = Vector3(50, 0, 50)
 
-[sub_resource type="ORMMaterial3D" id="ORMMaterial3D_4mrxx"]
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_7r4gi"]
-material = SubResource("ORMMaterial3D_4mrxx")
-radius = 0.05
-height = 0.2
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_w7kh3"]
-
 [node name="world" type="Node3D"]
 script = ExtResource("1_4mrxx")
 
@@ -71,8 +88,8 @@ mesh = SubResource("PlaneMesh_nnsk1")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ground"]
 shape = SubResource("HeightMapShape3D_e5uuo")
 
-[node name="player" type="CharacterBody3D" parent="." node_paths=PackedStringArray("label_tip", "label_fishcatched", "ray_camera", "timer_fishcatched", "image_fishcatched", "dialog_gameend", "rodfloat", "rodfloat_mesh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -16.474)
+[node name="player" type="CharacterBody3D" parent="." node_paths=PackedStringArray("label_tip", "label_fishcatched", "ray_camera", "timer_fishcatched", "image_fishcatched", "dialog_gameend", "image_pointcatch", "rod", "rod_shaft", "rod_cord", "rod_float", "rod_float_mesh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -15)
 collision_mask = 6
 script = ExtResource("1_nnsk1")
 label_tip = NodePath("../CanvasLayer/label_tip")
@@ -81,8 +98,12 @@ ray_camera = NodePath("Camera3D/ray_cast_camera")
 timer_fishcatched = NodePath("timer_fishcatched")
 image_fishcatched = NodePath("../CanvasLayer/image_fishcatched")
 dialog_gameend = NodePath("../CanvasLayer/dialog_gameend")
-rodfloat = NodePath("../rodfloat")
-rodfloat_mesh = NodePath("../rodfloat/MeshInstance3D")
+image_pointcatch = NodePath("../CanvasLayer/image_pointcatch")
+rod = NodePath("rod")
+rod_shaft = NodePath("rod/shaft")
+rod_cord = NodePath("rod/cord")
+rod_float = NodePath("rod/shaft/float")
+rod_float_mesh = NodePath("rod/shaft/float/MeshInstance3D")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="player"]
 mesh = SubResource("CapsuleMesh_e5uuo")
@@ -108,6 +129,27 @@ collision_mask = 4
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="player/area_tip"]
 shape = SubResource("CapsuleShape3D_4mrxx")
+
+[node name="rod" type="Node3D" parent="player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0, -0.3)
+
+[node name="shaft" type="MeshInstance3D" parent="player/rod"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CylinderMesh_o8fc1")
+
+[node name="float" type="StaticBody3D" parent="player/rod/shaft"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+collision_layer = 8
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="player/rod/shaft/float"]
+mesh = SubResource("CapsuleMesh_7r4gi")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="player/rod/shaft/float"]
+shape = SubResource("CapsuleShape3D_w7kh3")
+
+[node name="cord" type="MeshInstance3D" parent="player/rod"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+mesh = SubResource("CylinderMesh_e3hyu")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_71j4m")
@@ -183,29 +225,21 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="label_tutorial" type="Label" parent="CanvasLayer"]
-anchors_preset = 5
+[node name="image_pointcatch" type="TextureRect" parent="CanvasLayer"]
+anchors_preset = 8
 anchor_left = 0.5
+anchor_top = 0.5
 anchor_right = 0.5
-offset_left = -427.0
-offset_right = 427.0
-offset_bottom = 73.0
+anchor_bottom = 0.5
+offset_left = -48.0
+offset_top = -48.0
+offset_right = 48.0
+offset_bottom = 48.0
 grow_horizontal = 2
-theme_override_colors/font_color = Color(0.435294, 0, 0, 1)
-theme_override_font_sizes/font_size = 25
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 2
-
-[node name="rodfloat" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -33.4619)
-collision_layer = 8
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="rodfloat"]
-mesh = SubResource("CapsuleMesh_7r4gi")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="rodfloat"]
-shape = SubResource("CapsuleShape3D_w7kh3")
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+pivot_offset = Vector2(48, 48)
+texture = ExtResource("4_e3hyu")
 
 [connection signal="timeout" from="player/timer_fishcatched" to="player" method="_on_timer_fishcatched_timeout"]
 [connection signal="body_entered" from="player/area_tip" to="player" method="_on_area_tip_body_entered"]
