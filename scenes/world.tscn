@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://dqjggb2dpy4ws"]
+[gd_scene load_steps=28 format=3 uid="uid://dqjggb2dpy4ws"]
 
 [ext_resource type="Script" uid="uid://bb8lek1xm0jia" path="res://scripts/world.gd" id="1_4mrxx"]
 [ext_resource type="Script" uid="uid://bl8h4lt1fwqk5" path="res://scripts/player.gd" id="1_nnsk1"]
@@ -48,14 +48,6 @@ height = 0.2
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_w7kh3"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w7kh3"]
-albedo_color = Color(0, 0, 1, 1)
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_e3hyu"]
-material = SubResource("StandardMaterial3D_w7kh3")
-top_radius = 0.001
-bottom_radius = 0.001
-
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_qfnet"]
 panorama = ExtResource("4_4mrxx")
 filter = false
@@ -88,7 +80,7 @@ mesh = SubResource("PlaneMesh_nnsk1")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ground"]
 shape = SubResource("HeightMapShape3D_e5uuo")
 
-[node name="player" type="CharacterBody3D" parent="." node_paths=PackedStringArray("label_tip", "label_fishcatched", "ray_camera", "timer_fishcatched", "image_fishcatched", "dialog_gameend", "image_pointcatch", "rod", "rod_shaft", "rod_cord", "rod_float", "rod_float_mesh")]
+[node name="player" type="CharacterBody3D" parent="." node_paths=PackedStringArray("label_tip", "label_fishcatched", "ray_camera", "timer_fishcatched", "image_fishcatched", "dialog_gameend", "image_pointcatch", "rod", "rod_shaft", "rod_float", "rod_float_mesh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -15)
 collision_mask = 6
 script = ExtResource("1_nnsk1")
@@ -101,7 +93,6 @@ dialog_gameend = NodePath("../CanvasLayer/dialog_gameend")
 image_pointcatch = NodePath("../CanvasLayer/image_pointcatch")
 rod = NodePath("rod")
 rod_shaft = NodePath("rod/shaft")
-rod_cord = NodePath("rod/cord")
 rod_float = NodePath("rod/shaft/float")
 rod_float_mesh = NodePath("rod/shaft/float/MeshInstance3D")
 
@@ -146,10 +137,6 @@ mesh = SubResource("CapsuleMesh_7r4gi")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="player/rod/shaft/float"]
 shape = SubResource("CapsuleShape3D_w7kh3")
-
-[node name="cord" type="MeshInstance3D" parent="player/rod"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
-mesh = SubResource("CylinderMesh_e3hyu")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_71j4m")

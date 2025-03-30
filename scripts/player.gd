@@ -15,6 +15,8 @@ const ROD_COORD_LENGTH: float = 20.0
 const ROD_THROW_ANGLE: float = 45.0
 # power catching rod 
 var ROD_THROW_FORCE: float = 100.0
+# old coordinate rod
+var rod_position : Vector3 = Vector3.ZERO
 
 @export var label_tip: Label
 @export var label_fishcatched: Label
@@ -25,7 +27,6 @@ var ROD_THROW_FORCE: float = 100.0
 @export var image_pointcatch: TextureRect
 @export var rod: Node3D
 @export var rod_shaft: MeshInstance3D
-@export var rod_cord: MeshInstance3D
 @export var rod_float: StaticBody3D
 @export var rod_float_mesh: MeshInstance3D
 
@@ -67,6 +68,8 @@ func _input(event: InputEvent) -> void:
 				ray_camera.enabled = true
 				state = playerstate.FINDLAKE
 			else:
+				include_object(rod, self)
+				rod.position = rod_position
 				timer_fishcatched.stop()
 				state = playerstate.CASTFISHRODOFF_PROCESS	
 	else: if event is InputEventMouseMotion:
@@ -84,7 +87,7 @@ func _process(delta):
 			image_pointcatch.visible = false
 			rod_float.position = Vector3(0, 1, 0)
 			rod_float_mesh.mesh.material.albedo_color = Color(0, 1, 0)
-			rod.rotation = Vector3(-deg_to_rad(0), 0, 0)
+			rod.rotation = Vector3(-deg_to_rad(0), 0, 0)			
 			state = playerstate.CASTFISHRODON_PROCESS
 		else:
 			state = playerstate.IDLE
@@ -96,6 +99,8 @@ func _process(delta):
 			rod_float.global_transform.origin = rod_water_point_cross
 			state = playerstate.CASTFISHRODON
 	elif state == playerstate.CASTFISHRODON:
+		rod_position = rod.position
+		include_object(rod, get_tree().root)
 		timer_fishcatched.wait_time = randf_range(5, 10)
 		timer_fishcatched.start()
 		state = playerstate.IDLE
@@ -105,14 +110,17 @@ func _process(delta):
 			rod.rotation -= Vector3(-deg_to_rad(ROD_THROW_FORCE * delta), 0, 0)
 		else:
 			state = playerstate.CASTFISHRODOFF
-	elif state == playerstate.CASTFISHRODOFF:		
+	elif state == playerstate.CASTFISHRODOFF:	
 		#Player is still near water
 		if rod_float_mesh.mesh.material.albedo_color == Color(1, 0, 0):
 			# fish is catched
 			label_fishcatched.text = str(label_fishcatched.text.to_int() + 1)
 		if near_lake:
 			gametips(1)
-			image_pointcatch.visible = true		
+			image_pointcatch.visible = true
+		else:
+			rod.visible = false	
+		rod_float_mesh.mesh.material.albedo_color = Color(0, 1, 0)	
 		state = playerstate.IDLE
 		var count = label_fishcatched.text.to_int()
 		if  abs(count - FISHCATCHED_MAX) < 0.001:
@@ -152,7 +160,17 @@ func gametips(number: int):
 				label_tip.text = "Left mouse button to cast a fishing rod"
 			_:	
 				label_tip.text = ""
-		
+
+func include_object(obj, obj_to):
+# Zapisujemy globalną transformację obiektu (jego pozycję w przestrzeni świata)
+	var obj_global_transform = obj.global_transform
+	# Usuwamy obiekt z jego rodzica
+	obj.get_parent().remove_child(obj)
+	# Dodajemy obiekt z powrotem do głównego drzewa lub innego węzła
+	obj_to.add_child(obj)  # Przykład: dodanie do głównej sceny (root)
+	# Przywracamy obiektowi tę samą globalną transformację, aby pozostał w tym samym miejscu
+	obj.global_transform = obj_global_transform
+
 func _on_timer_fishcatched_timeout() -> void:
 	rod_float_mesh.mesh.material.albedo_color = Color(1, 0, 0)  # Czerwony kolor (RGB)
 
@@ -177,6 +195,8 @@ func _on_area_tip_body_exited(body: Node3D) -> void:
 		if rod_float.position == Vector3(0, 1, 0):
 			image_pointcatch.visible = false
 			rod.visible = false
-		else:	
+		else:
+			include_object(rod, self)
+			rod.position = rod_position
 			timer_fishcatched.stop()
 			state = playerstate.CASTFISHRODOFF_PROCESS
