@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://dqjggb2dpy4ws"]
+[gd_scene load_steps=29 format=3 uid="uid://dqjggb2dpy4ws"]
 
 [ext_resource type="Script" uid="uid://bb8lek1xm0jia" path="res://scripts/world.gd" id="1_4mrxx"]
 [ext_resource type="Script" uid="uid://bl8h4lt1fwqk5" path="res://scripts/player.gd" id="1_nnsk1"]
@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://c0ru11ebylxg" path="res://textures/lake_water.jpg" id="6_qfnet"]
 [ext_resource type="Texture2D" uid="uid://cg4jbwucekmsq" path="res://interface/fish_icon.png" id="8_4mrxx"]
 [ext_resource type="LabelSettings" uid="uid://bdgea7p016j3g" path="res://fonts/LabelSettings.tres" id="9_7r4gi"]
+[ext_resource type="PackedScene" uid="uid://cepe6ecqek2ny" path="res://map/map.tscn" id="11_e3hyu"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e5uuo"]
 albedo_color = Color(0.188235, 1, 0.0588235, 1)
@@ -135,6 +136,8 @@ stream = ExtResource("3_4wyf3")
 script = ExtResource("4_k0juu")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.970884, 0.23955, 0, -0.23955, 0.970884, 0, 0, 0)
+light_color = Color(0.941176, 0.662745, 0, 1)
 shadow_enabled = true
 
 [node name="lake" type="StaticBody3D" parent="."]
@@ -231,6 +234,8 @@ shape = SubResource("CapsuleShape3D_w7kh3")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="rod_cord"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="rod_cord"]
+
+[node name="map" parent="." instance=ExtResource("11_e3hyu")]
 
 [connection signal="timeout" from="player/timer_fishcatched" to="player" method="_on_timer_fishcatched_timeout"]
 [connection signal="body_entered" from="player/area_tip" to="player" method="_on_area_tip_body_entered"]
