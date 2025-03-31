@@ -65,7 +65,7 @@ func _input(event: InputEvent) -> void:
 			if rod_cord.visible:
 				timer_fishcatched.stop()
 				state = playerstate.CASTFISHRODOFF_PROCESS
-			else:
+			elif near_lake:
 				image_pointcatch.visible = true
 				ray_camera.enabled = true
 				state = playerstate.FINDLAKE
