@@ -81,8 +81,8 @@ mesh = SubResource("PlaneMesh_nnsk1")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ground"]
 shape = SubResource("HeightMapShape3D_e5uuo")
 
-[node name="player" type="CharacterBody3D" parent="." node_paths=PackedStringArray("label_tip", "label_fishcatched", "ray_camera", "timer_fishcatched", "image_fishcatched", "dialog_gameend", "image_pointcatch", "rod_shaft", "rod_float", "rod_cord", "rod_float_mesh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -15)
+[node name="player" type="CharacterBody3D" parent="." node_paths=PackedStringArray("label_tip", "label_fishcatched", "ray_camera", "timer_fishcatched", "image_fishcatched", "dialog_gameend", "image_pointcatch", "rod_shaft", "rod_float", "rod_cord", "rod_float_mesh", "rod_end")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -23.697)
 collision_mask = 6
 script = ExtResource("1_nnsk1")
 label_tip = NodePath("../CanvasLayer/label_tip")
@@ -96,6 +96,7 @@ rod_shaft = NodePath("Camera3D/rod_shaft")
 rod_float = NodePath("../rod_float")
 rod_cord = NodePath("../rod_cord")
 rod_float_mesh = NodePath("../rod_float/MeshInstance3D")
+rod_end = NodePath("Camera3D/rod_shaft/rod_end")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="player"]
 mesh = SubResource("CapsuleMesh_e5uuo")
@@ -117,6 +118,9 @@ collision_mask = 4
 transform = Transform3D(0.78451, -0.584605, 0.206835, 0.303137, 0.652511, 0.694505, -0.540973, -0.482146, 0.689117, 0.328509, -0.25936, -0.503945)
 mesh = SubResource("CylinderMesh_o8fc1")
 skeleton = NodePath("")
+
+[node name="rod_end" type="Node3D" parent="player/Camera3D/rod_shaft"]
+transform = Transform3D(1, 2.08616e-07, 0, 5.96046e-08, 1, 0, 2.98023e-08, -8.9407e-08, 1, -0.00249767, 0.136296, 0.0250063)
 
 [node name="timer_fishcatched" type="Timer" parent="player"]
 one_shot = true
@@ -226,11 +230,7 @@ mesh = SubResource("CapsuleMesh_7r4gi")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="rod_float"]
 shape = SubResource("CapsuleShape3D_w7kh3")
 
-[node name="rod_cord" type="Node3D" parent="."]
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="rod_cord"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="rod_cord"]
+[node name="rod_cord" type="Path3D" parent="."]
 
 [connection signal="timeout" from="player/timer_fishcatched" to="player" method="_on_timer_fishcatched_timeout"]
 [connection signal="body_entered" from="player/area_tip" to="player" method="_on_area_tip_body_entered"]

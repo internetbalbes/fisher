@@ -5,16 +5,10 @@ const JUMP_VELOCITY = 4.5
 # camer's sensitivity
 const SENSITIVITY = 0.1
 const FISHCATCHED_MAX = 10
- # siła grawitacji
-const gravity = Vector3(0, -9.8, 0) 
-# poziom wody
-const water_level = -5.0
-# Długość linki
-const ROD_COORD_LENGTH: float = 20.0
 # angle catching rod
 const ROD_THROW_ANGLE: float = 45.0
 # power catching rod 
-var ROD_THROW_FORCE: float = 100.0
+var ROD_THROW_FORCE: float = 100.0 
 
 @export var label_tip: Label
 @export var label_fishcatched: Label
@@ -25,8 +19,9 @@ var ROD_THROW_FORCE: float = 100.0
 @export var image_pointcatch: TextureRect
 @export var rod_shaft: MeshInstance3D
 @export var rod_float: StaticBody3D
-@export var rod_cord: Node3D
+@export var rod_cord: Path3D
 @export var rod_float_mesh: MeshInstance3D
+@export var rod_end: Node3D
 
 # player's state
 enum playerstate {
@@ -72,6 +67,8 @@ func _input(event: InputEvent) -> void:
 				state = playerstate.FINDLAKE
 	else: if event is InputEventMouseMotion:
 		rotate_y(deg_to_rad(-event.relative.x * SENSITIVITY))
+		if rod_cord.visible:
+			rod_cord_update()
 	else: if Input.is_action_pressed("ui_cancel"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		get_tree().change_scene_to_file("res://scenes/mainmenu.tscn")  # Przejdź do menu opcji	
@@ -83,13 +80,18 @@ func _process(delta):
 			timer_fishcatched.one_shot = true
 			rod_water_point_cross = ray_camera.get_collision_point()
 			image_pointcatch.visible = false
-			rod_float_mesh.mesh.material.albedo_color = Color(0, 1, 0)
+			rod_float_mesh.mesh.material.albedo_color = Color(0, 1, 0)			
+			var path_curve = Curve3D.new() 	
+			path_curve.add_point(rod_end.global_transform.origin)
+			path_curve.add_point(rod_water_point_cross)
+			rod_cord.curve = path_curve
 			state = playerstate.CASTFISHRODON_PROCESS
 		else:
 			state = playerstate.IDLE
 		ray_camera.enabled = false		
 	elif state == playerstate.CASTFISHRODON_PROCESS:
 		rod_float.global_transform.origin = rod_water_point_cross
+		rod_cord_update()
 		rod_cord.visible = true
 		rod_float.visible = true
 		state = playerstate.CASTFISHRODON
@@ -108,7 +110,8 @@ func _process(delta):
 			gametips(1)
 			image_pointcatch.visible = true
 		else:
-			rod_shaft.visible = false	
+			rod_shaft.visible = false
+			rod_cord_create(false)
 		rod_float.visible = false
 		rod_cord.visible = false
 		rod_float_mesh.mesh.material.albedo_color = Color(0, 1, 0)	
@@ -152,6 +155,36 @@ func gametips(number: int):
 			_:	
 				label_tip.text = ""
 
+func rod_cord_create(value):
+	if value:
+		if rod_cord.get_child_count() == 0:
+			var segment_count = 10
+			for i in range(segment_count):
+				var segment = MeshInstance3D.new()
+				rod_cord.add_child(segment)
+				segment.mesh = CylinderMesh.new()  # Używamy cylindra jako segmentu
+				segment.material_override = StandardMaterial3D.new()
+				segment.material_override.albedo_color = Color(0, 0, 0)  # Przypisujemy materiał		
+	else:
+		while rod_cord.get_child_count()>0:
+			rod_cord.remove_child(rod_cord.get_child(0))		
+			
+func rod_cord_update():		
+	var distance = rod_cord.curve.get_baked_length()
+	var angle = (rod_end.global_transform.origin-rod_water_point_cross).angle_to(Vector3(0, 1, 0))
+	var segment_count = 10
+	var segment_length = (distance*1.2)/10
+	print(rod_cord.curve.get_point_count())
+	for i in range(segment_count):
+		var t = i / float(segment_count - 1)  # Normalizujemy wartość t (0 - 1)		
+		var position_on_path = rod_cord.curve.get_point_position(t * distance)
+		var segment = rod_cord.get_child(i)
+		segment.scale = Vector3(0.001, segment_length, 0.001)  # Ustawiamy skalę segmentu
+		# Ustawiamy pozycję segmentu wzdłuż ścieżki
+		segment.global_transform.origin = position_on_path
+		segment.rotation.x = angle
+		segment.material_override.albedo_color = Color(0, 0, 0)  # Przypisujemy materiał		
+			
 func _on_timer_fishcatched_timeout() -> void:
 	rod_float_mesh.mesh.material.albedo_color = Color(1, 0, 0)  # Czerwony kolor (RGB)
 
@@ -168,6 +201,7 @@ func _on_area_tip_body_entered(body: Node3D) -> void:
 		gametips(1)
 		image_pointcatch.visible = true
 		rod_shaft.visible = true
+		rod_cord_create(true)
 
 func _on_area_tip_body_exited(body: Node3D) -> void:
 	if body.name =="lake":
@@ -177,6 +211,7 @@ func _on_area_tip_body_exited(body: Node3D) -> void:
 			image_pointcatch.visible = false
 			rod_shaft.visible = false
 			rod_float.visible = false
+			rod_cord_create(false)
 		else:
 			timer_fishcatched.stop()
 			state = playerstate.CASTFISHRODOFF_PROCESS
