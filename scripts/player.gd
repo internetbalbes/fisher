@@ -1,6 +1,11 @@
 extends CharacterBody3D
 
-const SPEED = 5.0
+# player's speed slow
+const SPEED_SLOW = 2.5
+# player's speed normal
+const SPEED_NORMAL = 5.0
+# player's speed fast
+const SPEED_FAST = 10.0
 const JUMP_VELOCITY = 4.5
 # camer's sensitivity
 const SENSITIVITY = 0.1
@@ -129,15 +134,20 @@ func _process(delta):
 		else:
 			if Input.is_action_pressed("jump"):
 				velocity.y = JUMP_VELOCITY
+			var speed = SPEED_NORMAL	
+			if Input.is_action_pressed("sneek"):
+				speed = SPEED_SLOW
+			elif Input.is_action_pressed("run"):
+				speed = SPEED_FAST	
 			var input_dir := Input.get_vector("left", "right", "forward", "back")
 			var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 			if direction:
-				velocity.x = direction.x * SPEED
-				velocity.z = direction.z * SPEED
+				velocity.x = direction.x * speed
+				velocity.z = direction.z * speed
 				state = playerstate.WALKING
 			else:
-				velocity.x = move_toward(velocity.x, 0, SPEED)
-				velocity.z = move_toward(velocity.z, 0, SPEED)
+				velocity.x = move_toward(velocity.x, 0, speed)
+				velocity.z = move_toward(velocity.z, 0, speed)
 				state = playerstate.IDLE
 		move_and_slide()
 	#message(state)
