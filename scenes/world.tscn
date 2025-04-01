@@ -1,4 +1,8 @@
+<<<<<<< ours
 [gd_scene load_steps=27 format=3 uid="uid://dqjggb2dpy4ws"]
+=======
+[gd_scene load_steps=28 format=3 uid="uid://dqjggb2dpy4ws"]
+>>>>>>> theirs
 
 [ext_resource type="Script" uid="uid://bb8lek1xm0jia" path="res://scripts/world.gd" id="1_4mrxx"]
 [ext_resource type="Script" uid="uid://cq0xa1ce37g08" path="res://scripts/camera_3d.gd" id="2_rwgxs"]
@@ -68,8 +72,28 @@ bake_interval = 5.0
 [node name="world" type="Node3D"]
 script = ExtResource("1_4mrxx")
 
+<<<<<<< ours
 [node name="player" type="CharacterBody3D" parent="."]
 transform = Transform3D(-0.173648, 0, -0.984808, 0, 1, 0, 0.984808, 0, -0.173648, -10.5548, 2.80855, -6.12164)
+=======
+[node name="player" type="CharacterBody3D" parent="." node_paths=PackedStringArray("label_tip", "label_fishcatched", "ray_camera", "timer_fishcatched", "image_fishcatched", "dialog_gameend", "image_pointcatch", "rod_shaft", "rod_float", "rod_cord", "rod_float_mesh", "rod_end", "map")]
+transform = Transform3D(0.529801, 0, -0.848122, 0, 1, 0, 0.848122, 0, 0.529801, -13.8511, 6.77788, 18.5824)
+collision_mask = 15
+script = ExtResource("1_nnsk1")
+label_tip = NodePath("../CanvasLayer/label_tip")
+label_fishcatched = NodePath("../CanvasLayer/label_fishcatched")
+ray_camera = NodePath("Camera3D/ray_cast_camera")
+timer_fishcatched = NodePath("timer_fishcatched")
+image_fishcatched = NodePath("../CanvasLayer/image_fishcatched")
+dialog_gameend = NodePath("../CanvasLayer/dialog_gameend")
+image_pointcatch = NodePath("../CanvasLayer/image_pointcatch")
+rod_shaft = NodePath("Camera3D/rod_shaft")
+rod_float = NodePath("../rod_float")
+rod_cord = NodePath("../rod_cord")
+rod_float_mesh = NodePath("../rod_float/MeshInstance3D")
+rod_end = NodePath("Camera3D/rod_shaft/rod_end")
+map = NodePath("../map")
+>>>>>>> theirs
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="player"]
 mesh = SubResource("CapsuleMesh_e5uuo")
