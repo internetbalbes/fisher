@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://dqjggb2dpy4ws"]
+[gd_scene load_steps=28 format=3 uid="uid://dqjggb2dpy4ws"]
 
 [ext_resource type="Script" uid="uid://bb8lek1xm0jia" path="res://scripts/world.gd" id="1_4mrxx"]
 [ext_resource type="Script" uid="uid://bl8h4lt1fwqk5" path="res://scripts/player.gd" id="1_nnsk1"]
@@ -7,14 +7,14 @@
 [ext_resource type="Texture2D" uid="uid://stddfr5gd4s4" path="res://skybox/AdobeStock_427699439.jpeg" id="4_4mrxx"]
 [ext_resource type="Texture2D" uid="uid://dh7ectcwijvds" path="res://interface/target.png" id="4_e3hyu"]
 [ext_resource type="Script" uid="uid://dr5g60domjiw4" path="res://scripts/audio_stream_player_3d.gd" id="4_k0juu"]
+[ext_resource type="Script" path="res://scripts/hunter.gd" id="4_q5onr"]
 [ext_resource type="Texture2D" uid="uid://cg4jbwucekmsq" path="res://interface/fish_icon.png" id="8_4mrxx"]
 [ext_resource type="LabelSettings" uid="uid://bdgea7p016j3g" path="res://fonts/LabelSettings.tres" id="9_7r4gi"]
 [ext_resource type="PackedScene" uid="uid://cepe6ecqek2ny" path="res://map/map.tscn" id="11_e3hyu"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_e5uuo"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_w7kh3"]
-size = Vector3(1, 2, 1)
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_e3hyu"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jhx03"]
 albedo_color = Color(1, 1, 0, 1)
@@ -25,9 +25,23 @@ top_radius = 0.05
 bottom_radius = 0.05
 height = 0.5
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4mrxx"]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_e3hyu"]
+height = 1.0
 radius = 2.0
-height = 4.0
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_q5onr"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_jhx03"]
+radius = 10.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e3hyu"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_q5onr"]
+material = SubResource("StandardMaterial3D_e3hyu")
+top_radius = 0.05
+bottom_radius = 0.05
+height = 0.5
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_qfnet"]
 panorama = ExtResource("4_4mrxx")
@@ -54,9 +68,10 @@ bake_interval = 5.0
 
 [node name="world" type="Node3D"]
 script = ExtResource("1_4mrxx")
+[node name="player" type="CharacterBody3D" parent="." node_paths=PackedStringArray("label_tip", "label_fishcatched", "ray_camera", "timer_fishcatched", "image_fishcatched", "dialog_gameend", "image_pointcatch", "rod_shaft", "rod_float", "rod_cord", "rod_float_mesh", "rod_end", "map")]
+transform = Transform3D(0.529801, 0, -0.848122, 0, 1, 0, 0.848122, 0, 0.529801, -13.8511, 6.77788, 18.5824)
+collision_mask = 15
 
-[node name="player" type="CharacterBody3D" parent="." node_paths=PackedStringArray("label_tip", "label_fishcatched", "ray_camera", "timer_fishcatched", "image_fishcatched", "dialog_gameend")]
-transform = Transform3D(-0.173648, 0, -0.984808, 0, 1, 0, 0.984808, 0, -0.173648, -10.5548, 2.80855, -6.12164)
 script = ExtResource("1_nnsk1")
 label_tip = NodePath("../CanvasLayer/label_tip")
 label_fishcatched = NodePath("../CanvasLayer/label_fishcatched")
@@ -69,7 +84,8 @@ dialog_gameend = NodePath("../CanvasLayer/dialog_gameend")
 mesh = SubResource("CapsuleMesh_e5uuo")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="player"]
-shape = SubResource("BoxShape3D_w7kh3")
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 0, 0)
+shape = SubResource("CapsuleShape3D_e3hyu")
 
 [node name="Camera3D" type="Camera3D" parent="player"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -78,7 +94,8 @@ script = ExtResource("2_rwgxs")
 
 [node name="ray_cast_camera" type="RayCast3D" parent="player/Camera3D"]
 enabled = false
-target_position = Vector3(0, 0, -50)
+target_position = Vector3(0, 0, -10)
+collision_mask = 12
 
 [node name="rod_shaft" type="MeshInstance3D" parent="player/Camera3D"]
 transform = Transform3D(0.78451, -0.584605, 0.206835, 0.303137, 0.652511, 0.694505, -0.540973, -0.482146, 0.689117, 0.328509, -0.25936, -0.503945)
@@ -92,9 +109,41 @@ transform = Transform3D(1, 2.08616e-07, 0, 5.96046e-08, 1, 0, 2.98023e-08, -8.94
 one_shot = true
 
 [node name="area_tip" type="Area3D" parent="player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, 0)
+collision_mask = 8
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="player/area_tip"]
-shape = SubResource("CapsuleShape3D_4mrxx")
+shape = SubResource("CylinderShape3D_e3hyu")
+
+[node name="hunter" type="CharacterBody3D" parent="." node_paths=PackedStringArray("player", "dialog_gameend", "map", "ray_cast_ground")]
+transform = Transform3D(0.114937, 0, -0.993373, 0, 1, 0, 0.993373, 0, 0.114937, -43.2286, 8.21149, 25.5654)
+collision_layer = 2
+collision_mask = 13
+script = ExtResource("4_q5onr")
+player = NodePath("../player")
+dialog_gameend = NodePath("../CanvasLayer/dialog_gameend")
+map = NodePath("../map")
+ray_cast_ground = NodePath("ray_cast_ground")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="hunter"]
+mesh = SubResource("CapsuleMesh_e5uuo")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="hunter"]
+shape = SubResource("CapsuleShape3D_q5onr")
+
+[node name="area_hunter_player" type="Area3D" parent="hunter"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="hunter/area_hunter_player"]
+shape = SubResource("CylinderShape3D_jhx03")
+
+[node name="ray_cast_ground" type="RayCast3D" parent="hunter"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+target_position = Vector3(0, 0, -3)
+collision_mask = 12
+
+[node name="batton_beat" type="MeshInstance3D" parent="hunter"]
+transform = Transform3D(0.790279, -0.579781, 0.198277, 0.304006, 0.651943, 0.694658, -0.532015, -0.488696, 0.691474, 0.3, 0.2, -0.5)
+mesh = SubResource("CylinderMesh_q5onr")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_71j4m")
@@ -177,7 +226,7 @@ pivot_offset = Vector2(48, 48)
 texture = ExtResource("4_e3hyu")
 
 [node name="rod_float" type="StaticBody3D" parent="."]
-collision_layer = 8
+collision_mask = 8
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="rod_float"]
 mesh = SubResource("CapsuleMesh_7r4gi")
@@ -194,5 +243,7 @@ transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0, 0)
 [connection signal="timeout" from="player/timer_fishcatched" to="player" method="_on_timer_fishcatched_timeout"]
 [connection signal="body_entered" from="player/area_tip" to="player" method="_on_area_tip_body_entered"]
 [connection signal="body_exited" from="player/area_tip" to="player" method="_on_area_tip_body_exited"]
+[connection signal="body_entered" from="hunter/area_hunter_player" to="hunter" method="_on_area_hunter_body_entered"]
+[connection signal="body_exited" from="hunter/area_hunter_player" to="hunter" method="_on_area_hunter_body_exited"]
 [connection signal="canceled" from="CanvasLayer/dialog_gameend" to="player" method="_on_confirmation_dialog_canceled"]
 [connection signal="confirmed" from="CanvasLayer/dialog_gameend" to="player" method="_on_confirmation_dialog_confirmed"]
