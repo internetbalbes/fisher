@@ -71,7 +71,6 @@ script = ExtResource("1_4mrxx")
 [node name="player" type="CharacterBody3D" parent="." node_paths=PackedStringArray("label_tip", "label_fishcatched", "ray_camera", "timer_fishcatched", "image_fishcatched", "dialog_gameend", "image_pointcatch", "rod_shaft", "rod_float", "rod_cord", "rod_float_mesh", "rod_end", "map")]
 transform = Transform3D(0.529801, 0, -0.848122, 0, 1, 0, 0.848122, 0, 0.529801, -13.8511, 6.77788, 18.5824)
 collision_mask = 15
-
 script = ExtResource("1_nnsk1")
 label_tip = NodePath("../CanvasLayer/label_tip")
 label_fishcatched = NodePath("../CanvasLayer/label_fishcatched")
