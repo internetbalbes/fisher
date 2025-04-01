@@ -55,7 +55,7 @@ bake_interval = 5.0
 [node name="world" type="Node3D"]
 script = ExtResource("1_4mrxx")
 
-[node name="player" type="CharacterBody3D" parent="." node_paths=PackedStringArray("label_tip", "label_fishcatched", "ray_camera", "timer_fishcatched", "image_fishcatched", "dialog_gameend", "image_pointcatch", "rod_shaft", "rod_float", "rod_cord", "rod_float_mesh", "rod_end", "map")]
+[node name="player" type="CharacterBody3D" parent="." node_paths=PackedStringArray("label_tip", "label_fishcatched", "ray_camera", "timer_fishcatched", "image_fishcatched", "dialog_gameend")]
 transform = Transform3D(-0.173648, 0, -0.984808, 0, 1, 0, 0.984808, 0, -0.173648, -10.5548, 2.80855, -6.12164)
 script = ExtResource("1_nnsk1")
 label_tip = NodePath("../CanvasLayer/label_tip")
@@ -64,13 +64,6 @@ ray_camera = NodePath("Camera3D/ray_cast_camera")
 timer_fishcatched = NodePath("timer_fishcatched")
 image_fishcatched = NodePath("../CanvasLayer/image_fishcatched")
 dialog_gameend = NodePath("../CanvasLayer/dialog_gameend")
-image_pointcatch = NodePath("../CanvasLayer/image_pointcatch")
-rod_shaft = NodePath("Camera3D/rod_shaft")
-rod_float = NodePath("../rod_float")
-rod_cord = NodePath("../rod_cord")
-rod_float_mesh = NodePath("../rod_float/MeshInstance3D")
-rod_end = NodePath("Camera3D/rod_shaft/rod_end")
-map = NodePath("../map")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="player"]
 mesh = SubResource("CapsuleMesh_e5uuo")
@@ -84,7 +77,6 @@ current = true
 script = ExtResource("2_rwgxs")
 
 [node name="ray_cast_camera" type="RayCast3D" parent="player/Camera3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 enabled = false
 target_position = Vector3(0, 0, -50)
 
